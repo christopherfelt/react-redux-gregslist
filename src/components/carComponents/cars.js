@@ -1,29 +1,30 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import NewItemForm from "../forms/newItem";
 import { getCars } from "../../actions/cars/carActions";
+import Car from "./car";
 
 class Cars extends Component {
   componentDidMount() {
     this.props.getCars();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.newCar) {
+      this.props.cars.unshift(nextProps.newCar);
+    }
+  }
+
   render() {
     const carItems = this.props.cars.map((car) => (
       <div key={car.id} className="card">
-        <div className="card-body">
-          <h5 className="card-title">{car.title}</h5>
-          <p className="card-text">{car.description}</p>
-          <h5 className="card-title">{car.price}</h5>
-          <a href="#" className="btn btn-primary">
-            Go somewhere
-          </a>
-        </div>
+        <Car car={car} />
       </div>
     ));
     return (
-      <div>
-        <h1>Hello from car</h1>
+      <div className="card-columns">
+        <NewItemForm itemType={"car"} />
         {carItems}
       </div>
     );
